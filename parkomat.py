@@ -1,5 +1,7 @@
 from decimal import *
-from datetime import datetime
+from datetime import datetime, timedelta
+
+
 
 
 class Money:
@@ -26,21 +28,49 @@ class Parkomat:
         self._Rejestracja = ''
         self._Suma = 0
 
-    def ZliczanieMonet(self, moneta):
-        M = Money(moneta)
-        return self._ListaMonet.count(M)
 
-    def DodajMonete(self, moneta):
-        self._ListaMonet.append(moneta)
+    def zliczanieMonet(self, wartosc):
+        licz = 0
+        for x in range (len(self._ListaMonet)):
+            if Decimal(str(wartosc)) == self._ListaMonet[x].pobierz_wartosc():
+                licz+=1
+        return licz
 
-    def PobierzRejestrecje(self):
-        rejestracja = input('Wpisz rejestracje pojazdu: ')
-        if len(rejestracja) > 9:
+    def dodajMonete(self, moneta):
+        grosze = moneta*100
+        M=Money(moneta)
+        self._ListaMonet.append(M)
+        for x in range (grosze):
+            if self._Suma < 2.0:
+                self.czasZaJedenGrosz(18)
+            elif self._Suma < 6.0:
+                self.czasZaJedenGrosz(9)
+            else:
+                self.czasZaJedenGrosz(7.2)
+
+    def pobierzRejestrecje(self):
+        self._Rejestracja = input('Wpisz rejestracje pojazdu: ')
+        if len(self._Rejestracja) > 9:
             raise NotImplementedError
-        return rejestracja.upper()
 
-m1=Money(0.2)
+        return self._Rejestracja.upper()
+
+    def czasZaJedenGrosz(self, sekundy):
+        self._Suma += Decimal(0.01)
+        self._CzasWyjazdu += timedelta(seconds=sekundy)
+
+    def pobierzCzasWyjazdu(self):
+        return self._CzasWyjazdu
+
+    def pobierzAktualnyCzas(self):
+        return self._AktualnyCzas
+
+
 P = Parkomat()
-P.DodajMonete(m1)
-print(P.ZliczanieMonet(0.2))
-print(P.PobierzRejestrecje())
+P.dodajMonete(1)
+P.dodajMonete(1)
+
+print(P.pobierzAktualnyCzas())
+print(P.pobierzCzasWyjazdu())
+print(P.zliczanieMonet(1))
+print(P.pobierzRejestrecje())

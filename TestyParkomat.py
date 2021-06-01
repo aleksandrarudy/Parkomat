@@ -1,5 +1,6 @@
 import unittest
 from parkomat import *
+from Money import *
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,24 +1,7 @@
-from decimal import *
+from Money import *
+from Money import Money
 from datetime import datetime, timedelta
-
-
-
-
-class Money:
-    def __init__(self, wartosc):
-        if wartosc in {0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50}:
-            self._wartosc = Decimal(str(wartosc))
-        else:
-            self._wartosc = Decimal('0')
-            print('nieznana moneta. przypisano wartosc 0zł')
-        self._waluta = 'PLN'
-
-    def pobierz_wartosc(self):
-        return self._wartosc
-
-    def pobierz_walute(self):
-        return self._waluta
-
+import Interface
 
 class Parkomat:
     def __init__(self):
@@ -28,11 +11,10 @@ class Parkomat:
         self._Rejestracja = ''
         self._Suma = 0
 
-
     def zliczanieMonet(self, wartosc):
         licz = 0
         for x in range (len(self._ListaMonet)):
-            if Decimal(str(wartosc)) == self._ListaMonet[x].pobierz_wartosc():
+            if Decimal(str(wartosc)) == self._ListaMonet[x].pobierzWartosc():
                 licz+=1
         return licz
 
@@ -66,11 +48,12 @@ class Parkomat:
         return self._AktualnyCzas
 
 
-P = Parkomat()
-P.dodajMonete(1)
-P.dodajMonete(1)
+# P = Parkomat()
+# P.dodajMonete(1)
+# P.dodajMonete(1)
 
-print(P.pobierzAktualnyCzas())
-print(P.pobierzCzasWyjazdu())
-print(P.zliczanieMonet(1))
-print(P.pobierzRejestrecje())
+# print(P.pobierzAktualnyCzas())
+# print(P.pobierzCzasWyjazdu())
+# print(P.zliczanieMonet(1))
+# print(P.pobierzRejestrecje())
+

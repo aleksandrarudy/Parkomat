@@ -47,13 +47,22 @@ class Parkomat:
     def pobierzAktualnyCzas(self):
         return self._AktualnyCzas
 
+    def validate(date_text):
+        try:
+            datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M')
+        except ValueError:
+            raise ValueError("Incorrect data format, should be Y-m-d H:M")
 
-# P = Parkomat()
-# P.dodajMonete(1)
-# P.dodajMonete(1)
 
-# print(P.pobierzAktualnyCzas())
-# print(P.pobierzCzasWyjazdu())
-# print(P.zliczanieMonet(1))
-# print(P.pobierzRejestrecje())
+
+
+P = Parkomat()
+P.dodajMonete(1)
+P.dodajMonete(1)
+
+
+print(P.pobierzAktualnyCzas())
+print(P.pobierzCzasWyjazdu())
+print(P.zliczanieMonet(1))
+print(P.pobierzRejestrecje())
 

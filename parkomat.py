@@ -1,7 +1,9 @@
+from Interface import *
 from Money import *
 from Money import Money
 from datetime import datetime, timedelta
-import Interface
+from re import compile
+
 
 class Parkomat:
     def __init__(self):
@@ -19,10 +21,11 @@ class Parkomat:
         return licz
 
     def dodajMonete(self, moneta):
-        grosze = moneta*100
+
+        grosze = int(moneta*100)
         M=Money(moneta)
         self._ListaMonet.append(M)
-        for x in range (grosze):
+        for x in range(grosze):
             if self._Suma < 2.0:
                 self.czasZaJedenGrosz(18)
             elif self._Suma < 6.0:
@@ -32,10 +35,12 @@ class Parkomat:
 
     def pobierzRejestrecje(self):
         self._Rejestracja = input('Wpisz rejestracje pojazdu: ')
-        if len(self._Rejestracja) > 9:
+        format = compile('^[a-zA-Z0-9]')
+        if format.match(self._Rejestracja) is not None and len(self._Rejestracja) < 9:
+            rejestracja = self._Rejestracja.replace(' ', '').upper()
+        else:
             raise NotImplementedError
-
-        return self._Rejestracja.upper()
+        return rejestracja
 
     def czasZaJedenGrosz(self, sekundy):
         self._Suma += Decimal(0.01)
@@ -47,22 +52,10 @@ class Parkomat:
     def pobierzAktualnyCzas(self):
         return self._AktualnyCzas
 
-    def validate(date_text):
-        try:
-            datetime.datetime.strptime(date_text, '%Y-%m-%d %H:%M')
-        except ValueError:
-            raise ValueError("Incorrect data format, should be Y-m-d H:M")
-
-
-
 
 P = Parkomat()
-P.dodajMonete(1)
-P.dodajMonete(1)
 
+# print(P.pobierzAktualnyCzas())
+# print(P.pobierzCzasWyjazdu())
 
-print(P.pobierzAktualnyCzas())
-print(P.pobierzCzasWyjazdu())
-print(P.zliczanieMonet(1))
-print(P.pobierzRejestrecje())
-
+# print(P.pobierzRejestrecje())

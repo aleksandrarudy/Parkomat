@@ -15,4 +15,3 @@ class Money:
 
     def pobierzWalute(self):
         return self._waluta
-

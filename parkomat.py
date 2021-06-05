@@ -1,4 +1,4 @@
-from Interface import *
+# from Interface import *
 from Money import *
 from Money import Money
 from datetime import datetime, timedelta
@@ -33,18 +33,27 @@ class Parkomat:
             else:
                 self.czasZaJedenGrosz(7.2)
 
-    def pobierzRejestrecje(self):
-        self._Rejestracja = input('Wpisz rejestracje pojazdu: ')
+    def pobierzRejestrecje(self, wartosc_wpisana):
         format = compile('^[a-zA-Z0-9]')
-        if format.match(self._Rejestracja) is not None and len(self._Rejestracja) < 9:
-            rejestracja = self._Rejestracja.replace(' ', '').upper()
+        if format.match(wartosc_wpisana) is not None and len(wartosc_wpisana) < 9:
+            wartosc_wpisana = wartosc_wpisana.replace(' ', '').upper()
+            self._Rejestracja = wartosc_wpisana
         else:
             raise NotImplementedError
-        return rejestracja
+        return self._Rejestracja
 
     def czasZaJedenGrosz(self, sekundy):
+        if self._CzasWyjazdu.hour >= 20:
+            sek = self._CzasWyjazdu.second
+            self._CzasWyjazdu += timedelta(days=1)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            if self._Suma != 0:
+                self._CzasWyjazdu += timedelta(seconds=sek)
+        if self._CzasWyjazdu.hour < 8:
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
         self._Suma += Decimal(0.01)
         self._CzasWyjazdu += timedelta(seconds=sekundy)
+
 
     def pobierzCzasWyjazdu(self):
         return self._CzasWyjazdu
@@ -54,8 +63,11 @@ class Parkomat:
 
 
 P = Parkomat()
+P.dodajMonete(5)
+P.dodajMonete(1)
+P.dodajMonete(0.01)
 
-# print(P.pobierzAktualnyCzas())
-# print(P.pobierzCzasWyjazdu())
+print(P.pobierzAktualnyCzas())
+print(P.pobierzCzasWyjazdu())
 
-# print(P.pobierzRejestrecje())
+# P.pobierzRejestrecje('oew..99')

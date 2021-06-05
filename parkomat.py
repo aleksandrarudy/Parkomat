@@ -1,4 +1,5 @@
 # from Interface import *
+import datetime
 from Money import *
 from Money import Money
 from datetime import datetime, timedelta
@@ -51,9 +52,28 @@ class Parkomat:
                 self._CzasWyjazdu += timedelta(seconds=sek)
         if self._CzasWyjazdu.hour < 8:
             self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+        weekno = self._CzasWyjazdu.weekday()
+        if weekno == 5:
+            sek = self._CzasWyjazdu.second
+            self._CzasWyjazdu += timedelta(days=2)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            if self._Suma != 0:
+                self._CzasWyjazdu += timedelta(seconds=sek)
+        if weekno == 6:
+            sek = self._CzasWyjazdu.second
+            self._CzasWyjazdu += timedelta(days=1)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            if self._Suma != 0:
+                self._CzasWyjazdu += timedelta(seconds=sek)
         self._Suma += Decimal(0.01)
         self._CzasWyjazdu += timedelta(seconds=sekundy)
 
+    def zmianaAktualnegoCzasu(self, rok, miesiac, dzien, godziny, minuty, sekundy):
+        d = datetime.strptime(str(rok + '' + miesiac + '' + dzien), '%Y %m %d')
+        a = d.replace(hour=godziny, minute=minuty, second=sekundy)
+        self._AktualnyCzas = a
+        self._CzasWyjazdu = self._AktualnyCzas
+        self._Suma = 0
 
     def pobierzCzasWyjazdu(self):
         return self._CzasWyjazdu
@@ -62,11 +82,12 @@ class Parkomat:
         return self._AktualnyCzas
 
 
-P = Parkomat()
-P.dodajMonete(5)
-P.dodajMonete(1)
-P.dodajMonete(0.01)
 
+P = Parkomat()
+P.dodajMonete(2)
+# P.dodajMonete(1)
+# P.dodajMonete(0.01)
+#
 print(P.pobierzAktualnyCzas())
 print(P.pobierzCzasWyjazdu())
 

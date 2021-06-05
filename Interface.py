@@ -5,6 +5,7 @@ from tkinter import *
 from Money import *
 import datetime
 
+
 P = Parkomat()
 okno = Tk()
 okno.geometry('530x600')
@@ -62,6 +63,7 @@ def zatwierdz():
 
 zaplacbutton = Button(okno, height=3, width=40, bg='goldenrod', text='Zatwierdź', command=lambda: zatwierdz())
 zaplacbutton.place(x=70, y=470)
+
 rejestracjatext = Text(okno, height=1, width=25)
 rejestracjatext.place(x=80, y=150)
 Label(okno, text="Rejestracja:").place(x=80, y=120)
@@ -69,17 +71,19 @@ Label(okno, text="Rejestracja:").place(x=80, y=120)
 
 def aktdata_button():
     data.delete(0, END)
-    data.insert(0, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    data.insert(0, P.pobierzAktualnyCzas().strftime("%Y-%m-%d %H:%M:%S"))
 
 
-aktdata = Button(okno, text="Aktualna data", width=10, command=P.pobierzAktualnyCzas())
+data = Entry(okno, width=20)
+data.place(x=100, y=100)
+data.insert(0, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+aktdata = Button(okno, text="Aktualna data", width=10, command=lambda: aktdata_button())
 aktdata.place(x=250, y=95)
 
 text1 = Text(okno, height=1, width=25)
 Label(okno, text='Data początku aktywności biletu: ').place(x=80, y=80)
 
-data = Entry(okno, width=20)
-data.place(x=100, y=100)
-data.insert(0, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+
 
 okno.mainloop()

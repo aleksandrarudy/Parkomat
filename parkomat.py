@@ -1,4 +1,4 @@
-# from Interface import *
+from Interface import *
 import datetime
 from Money import *
 from Money import Money
@@ -19,7 +19,9 @@ class Parkomat:
         for x in range (len(self._ListaMonet)):
             if Decimal(str(wartosc)) == self._ListaMonet[x].pobierzWartosc():
                 licz+=1
-        return licz
+                if licz > 200:
+                    raise NotImplementedError
+        return print(licz)
 
     def dodajMonete(self, moneta):
 
@@ -34,9 +36,10 @@ class Parkomat:
             else:
                 self.czasZaJedenGrosz(7.2)
 
+
     def pobierzRejestrecje(self, wartosc_wpisana):
-        format = compile('^[a-zA-Z0-9]')
-        if format.match(wartosc_wpisana) is not None and len(wartosc_wpisana) < 9:
+        format_rej = compile("^[\w\ ]*$")
+        if format_rej.match(wartosc_wpisana) is not None and len(wartosc_wpisana) <= 10:
             wartosc_wpisana = wartosc_wpisana.replace(' ', '').upper()
             self._Rejestracja = wartosc_wpisana
         else:
@@ -69,7 +72,7 @@ class Parkomat:
         self._CzasWyjazdu += timedelta(seconds=sekundy)
 
     def zmianaAktualnegoCzasu(self, rok, miesiac, dzien, godziny, minuty, sekundy):
-        d = datetime.strptime(str(rok + '' + miesiac + '' + dzien), '%Y %m %d')
+        d = datetime.strptime(str(rok + ' ' + miesiac + ' ' + dzien), '%Y %m %d')
         a = d.replace(hour=godziny, minute=minuty, second=sekundy)
         self._AktualnyCzas = a
         self._CzasWyjazdu = self._AktualnyCzas
@@ -82,13 +85,14 @@ class Parkomat:
         return self._AktualnyCzas
 
 
-
-P = Parkomat()
-P.dodajMonete(2)
+# P = Parkomat()
+# P.dodajMonete(2)
 # P.dodajMonete(1)
 # P.dodajMonete(0.01)
 #
-print(P.pobierzAktualnyCzas())
-print(P.pobierzCzasWyjazdu())
+# P.zmianaAktualnegoCzasu('2021', '6', '4', 19, 30, 33)
+# P.dodajMonete(1)
+# print(P.pobierzAktualnyCzas())
+# print(P.pobierzCzasWyjazdu())
 
-# P.pobierzRejestrecje('oew..99')
+# print(P.pobierzRejestrecje('ijo 990'))

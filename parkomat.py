@@ -1,4 +1,3 @@
-from Interface import *
 import datetime
 from Money import *
 from Money import Money
@@ -16,17 +15,17 @@ class Parkomat:
 
     def zliczanieMonet(self, wartosc):
         licz = 0
-        for x in range (len(self._ListaMonet)):
+        for x in range(len(self._ListaMonet)):
             if Decimal(str(wartosc)) == self._ListaMonet[x].pobierzWartosc():
-                licz+=1
+                licz += 1
                 if licz > 200:
                     raise NotImplementedError
         return print(licz)
 
     def dodajMonete(self, moneta):
 
-        grosze = int(moneta*100)
-        M=Money(moneta)
+        grosze = int(moneta * 100)
+        M = Money(moneta)
         self._ListaMonet.append(M)
         for x in range(grosze):
             if self._Suma < 2.0:
@@ -85,10 +84,10 @@ class Parkomat:
 
 
 P = Parkomat()
+P.dodajMonete(2)
 # P.dodajMonete(2)
-# P.dodajMonete(1)
 # P.dodajMonete(0.01)
-
+#
 # P.zmianaAktualnegoCzasu('2021', '6', '4', 19, 30, 33)
 # P.dodajMonete(1)
 # print(P.pobierzAktualnyCzas())

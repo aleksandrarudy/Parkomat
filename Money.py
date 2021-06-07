@@ -1,9 +1,14 @@
 from decimal import *
 
 
-class Money:
+class Coin():
+    lista_monet = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50]
+
+class Money(Coin):
+
     def __init__(self, wartosc):
-        if wartosc in {0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50}:
+        super().__init__()
+        if wartosc in self.lista_monet:
             self._wartosc = Decimal(str(wartosc))
         else:
             self._wartosc = Decimal('0')
@@ -15,3 +20,4 @@ class Money:
 
     def pobierzWalute(self):
         return self._waluta
+

@@ -1,9 +1,13 @@
+from Interface import *
 import datetime
 from Money import *
 from Money import Money
 from datetime import datetime, timedelta
 from re import compile
+from decimal import *
+from Exceptions import *
 
+getcontext().prec = 3
 
 class Parkomat:
     def __init__(self):
@@ -12,36 +16,40 @@ class Parkomat:
         self._CzasWyjazdu = self._AktualnyCzas
         self._Rejestracja = ''
         self._Suma = 0
+        self._wartosc_ilosc = {0.01:0, 0.02:0, 0.05:0, 0.1:0, 0.2:0, 0.5:0, 1:0, 2:0, 5:0}
 
-    def zliczanieMonet(self, wartosc):
-        licz = 0
+    def zliczanieMonet(self, wartosc, ilosc):
+        wartosc = Decimal(str(wartosc))
         for x in range(len(self._ListaMonet)):
-            if Decimal(str(wartosc)) == self._ListaMonet[x].pobierzWartosc():
-                licz += 1
-                if licz > 200:
-                    raise NotImplementedError
-        return print(licz)
+            if wartosc == self._ListaMonet[x].pobierzWartosc():
+                if wartosc < Decimal(str(10)):
+                    self._wartosc_ilosc[wartosc] = ilosc
+                    if self._wartosc_ilosc[wartosc] > 200:
+                        raise PrzepelnienieParkomatu()
 
-    def dodajMonete(self, moneta):
-
+    def dodajMonete(self, moneta, ilosc):
+        self.sprawdzIloscMonet(ilosc)
         grosze = int(moneta * 100)
+        ilosc=int(ilosc)
         M = Money(moneta)
         self._ListaMonet.append(M)
-        for x in range(grosze):
-            if self._Suma < 2.0:
-                self.czasZaJedenGrosz(18)
-            elif self._Suma < 6.0:
-                self.czasZaJedenGrosz(9)
-            else:
-                self.czasZaJedenGrosz(7.2)
+        for i in range(ilosc):
+            for x in range(grosze):
+                if self._Suma < 2.0:
+                    self.czasZaJedenGrosz(18)
+                elif self._Suma < 6.0:
+                    self.czasZaJedenGrosz(9)
+                else:
+                    self.czasZaJedenGrosz(7.2)
+        self.zliczanieMonet(moneta, ilosc)
 
     def pobierzRejestrecje(self, wartosc_wpisana):
         format_rej = compile("^[\w\ ]*$")
-        if format_rej.match(wartosc_wpisana) is not None and len(wartosc_wpisana) <= 10:
+        if format_rej.match(wartosc_wpisana) is not None and len(wartosc_wpisana) <= 10 and len(wartosc_wpisana) > 3 and not wartosc_wpisana:
             wartosc_wpisana = wartosc_wpisana.replace(' ', '').upper()
             self._Rejestracja = wartosc_wpisana
         else:
-            raise NotImplementedError
+            raise BlednaRejestracja()
         return self._Rejestracja
 
     def czasZaJedenGrosz(self, sekundy):
@@ -82,9 +90,19 @@ class Parkomat:
     def pobierzAktualnyCzas(self):
         return self._AktualnyCzas
 
+    def sprawdzIloscMonet(self, ilosc):
+        try:
+            int(ilosc)
+        except ValueError:
+            raise NiecalkowitaLiczbaMonet()
+        if int(ilosc) <= 0:
+            raise UjemnaLiczbaMonet
+
+
+
 
 P = Parkomat()
-P.dodajMonete(2)
+# P.dodajMonete(2)
 # P.dodajMonete(2)
 # P.dodajMonete(0.01)
 #
@@ -93,4 +111,4 @@ P.dodajMonete(2)
 # print(P.pobierzAktualnyCzas())
 # print(P.pobierzCzasWyjazdu())
 
-# print(P.pobierzRejestrecje('ijo 990'))
+# print(P.pobierzRejestrecje(''))

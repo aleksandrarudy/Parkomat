@@ -36,7 +36,6 @@ class Parkomat:
             else:
                 self.czasZaJedenGrosz(7.2)
 
-
     def pobierzRejestrecje(self, wartosc_wpisana):
         format_rej = compile("^[\w\ ]*$")
         if format_rej.match(wartosc_wpisana) is not None and len(wartosc_wpisana) <= 10:
@@ -50,22 +49,22 @@ class Parkomat:
         if self._CzasWyjazdu.hour >= 20:
             sek = self._CzasWyjazdu.second
             self._CzasWyjazdu += timedelta(days=1)
-            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0)
             if self._Suma != 0:
                 self._CzasWyjazdu += timedelta(seconds=sek)
         if self._CzasWyjazdu.hour < 8:
-            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0)
         weekno = self._CzasWyjazdu.weekday()
         if weekno == 5:
             sek = self._CzasWyjazdu.second
             self._CzasWyjazdu += timedelta(days=2)
-            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0)
             if self._Suma != 0:
                 self._CzasWyjazdu += timedelta(seconds=sek)
         if weekno == 6:
             sek = self._CzasWyjazdu.second
             self._CzasWyjazdu += timedelta(days=1)
-            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0, microsecond=0)
+            self._CzasWyjazdu = self._CzasWyjazdu.replace(hour=8, minute=0, second=0)
             if self._Suma != 0:
                 self._CzasWyjazdu += timedelta(seconds=sek)
         self._Suma += Decimal(0.01)
@@ -85,11 +84,11 @@ class Parkomat:
         return self._AktualnyCzas
 
 
-# P = Parkomat()
+P = Parkomat()
 # P.dodajMonete(2)
 # P.dodajMonete(1)
 # P.dodajMonete(0.01)
-#
+
 # P.zmianaAktualnegoCzasu('2021', '6', '4', 19, 30, 33)
 # P.dodajMonete(1)
 # print(P.pobierzAktualnyCzas())

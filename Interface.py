@@ -54,13 +54,16 @@ button50 = Button(okno, height=2, width=15, bg='light blue', text='50pln',
                   command=lambda: [P.dodajMonete(50), P.zliczanieMonet(50)])
 button50.place(x=300, y=350)
 
+ad = StringVar()
+dw = StringVar()
+
 
 def zatwierdz():
     okno.rejestracja = ''
     setattr(okno, 'rejestracja', rejestracjatext.get(1.0, END))
     label = Label(okno, height=2, text=P.pobierzRejestrecje(okno.rejestracja))
     label.place(x=100, y=160)
-    # print(P.pobierzRejestrecje(okno.rejestracja))
+    dw.set('Data wyjazdu: {}'.format(P.pobierzCzasWyjazdu()))
 
 
 zaplacbutton = Button(okno, height=3, width=40, bg='goldenrod', text='Zatwierdź', command=lambda: zatwierdz())
@@ -68,33 +71,46 @@ zaplacbutton.place(x=70, y=470)
 
 
 rejestracjatext = Text(okno, height=1, width=15)
-rejestracjatext.place(x=100, y=140)
-Label(okno, text="Rejestracja:").place(x=80, y=120)
-
-t = StringVar()
-tl = StringVar()
+rejestracjatext.place(x=100, y=170)
+Label(okno, text="Rejestracja:").place(x=80, y=150)
 
 
-def aktdata_button():
-    setattr(okno, 'date', data.get(0, END))
-    okno._date = okno.date.split(" ", 5)
+
+def aktdata():
+    okno.date = ''
+    setattr(okno, 'date', wpisywanie_nowej_daty.get(1.0, END))
+    okno.date = okno.date.split(" ", 5)
     P.zmianaAktualnegoCzasu(okno.date[0], okno.date[1], okno.date[2], int(okno.date[3]), int(okno.date[4]),
                             int(okno.date[5]))
-    t.set("Aktualna data: {}".format(P.pobierzAktualnyCzas()))
-    tl.set("Termin wyjazdu {}".format(P.pobierzCzasWyjazdu()))
-    return "Zaktualizowano czas"
+
+    ad.set("Aktualna data: {}".format(P.pobierzAktualnyCzas()))
+    dw.set("Termin wyjazdu {}".format(P.pobierzCzasWyjazdu()))
 
 
-# setdate = Button(okno, width=10, text="Zmiana Daty", command=lambda: print(aktdata_button()))
-# setdate.place(x=250, y=70)
-data = Entry(okno, width=20)
-data.place(x=100, y=100)
-data.insert(0, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-aktdata = Button(okno, text="Aktualna data", width=10, command=lambda: aktdata_button())
-aktdata.place(x=250, y=95)
+wpisywanie_nowej_daty = Text(okno, height=1, width=25)
+Label(okno, text="Zmiana czasu:").place(x=80, y=80)
+wpisywanie_nowej_daty.place(x=100, y=100)
+
+wypisywnie_dodanych_monet = Text(okno, height=1, width=25)
+
+
+def zapis_Zmiany_daty_przycisk():
+    label2 = Label(okno, text=wpisywanie_nowej_daty.get(1.0, END))
+    label2.place(x=100, y=120)
+
+
+aktdata_przycick = Button(okno, text="Zmień date", width=10, command=lambda: [aktdata(), zapis_Zmiany_daty_przycisk()])
+aktdata_przycick.place(x=350, y=100)
+
 
 text1 = Text(okno, height=1, width=25)
-Label(okno, text='Data początku aktywności biletu: ').place(x=80, y=80)
+Label(okno, text='Aktualna data: ').place(x=80, y=40)
+data = Entry(okno, width=30)
+data.place(x=100, y=60)
+data.insert(0, P.pobierzAktualnyCzas())
+
+
+
 
 okno.mainloop()

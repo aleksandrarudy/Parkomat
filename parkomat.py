@@ -25,7 +25,7 @@ class Parkomat:
                 if wartosc < Decimal(str(10)):
                     self._wartosc_ilosc[wartosc] = ilosc
                     if self._wartosc_ilosc[wartosc] > 200:
-                        raise PrzepelnienieParkomatu()
+                        raise PrzepelnienieParkomatu('Ilość monet większa od 200')
 
     def dodajMonete(self, moneta, ilosc):
         self.sprawdzIloscMonet(ilosc)
@@ -49,7 +49,7 @@ class Parkomat:
             wartosc_wpisana = wartosc_wpisana.replace(' ', '').upper()
             self._Rejestracja = wartosc_wpisana
         else:
-            raise BlednaRejestracja()
+            raise BlednaRejestracja('Błędna rejestracja\n Podaj jeszcze raz')
         return self._Rejestracja
 
     def czasZaJedenGrosz(self, sekundy):
@@ -94,10 +94,9 @@ class Parkomat:
         try:
             int(ilosc)
         except ValueError:
-            raise NiecalkowitaLiczbaMonet()
+            raise NiecalkowitaLiczbaMonet('Podana ilość monet jest liczą niecałkowitą')
         if int(ilosc) <= 0:
-            raise UjemnaLiczbaMonet
-
+            raise UjemnaLiczbaMonet('Ilość monet nie może być ujemna')
 
 
 

@@ -1,22 +1,20 @@
 from parkomat import *
 from parkomat import Parkomat
 from tkinter import *
-from tkinter import Label, Button, Spinbox
+from tkinter import Label, Button, Spinbox, messagebox
+from Exceptions import *
 
 # tworzenia okna głównego
 P = Parkomat()
 okno = Tk()
 okno.geometry('450x600')
 okno.resizable(width=False, height=False)
-# okno.configure(bg='white')
 
 # tytul okna
 tytul = Label(okno, text='PARKOMAT')
 tytul.config(font=('Calibri', 20, 'bold',))
 tytul.pack()
 C = Coin()
-
-# [Button(okno, text=str(i), height=2, width=15, command=lambda: [P.dodajMonete(i), P.zliczanieMonet(i)]).place() for i in C.lista_monet]
 
 
 #  przyciski dodawania monet
@@ -72,7 +70,6 @@ def otworz_nowe_okno():
     nazwa_okna.config(font=('Calibri', 12, 'bold'))
     nazwa_okna.pack()
 
-
     Label(nowe_okno, text='Rejestracja: ').pack()
     rej = Label(nowe_okno, text=P.pobierzRejestrecje(okno.rejestracja)).pack()
 
@@ -82,12 +79,22 @@ def otworz_nowe_okno():
     Label(nowe_okno, text='Data wyjazdu: ').pack()
     datawyjazdu = Label(nowe_okno, text=P.pobierzCzasWyjazdu()).pack()
 
+import traceback
+
 
 # oprogramowanie przycisku zatwierdz
 def zatwierdz():
     okno.rejestracja = ''
     setattr(okno, 'rejestracja', wpisywanie_rejestracji.get(1.0, END))
-    return P.pobierzRejestrecje(okno.rejestracja)
+    try:
+        numer_rej = P.pobierzRejestrecje(okno.rejestracja)
+    except BlednaRejestracja as e:
+        error_string = '{}'.format(e)
+        messagebox.showwarning("showworning", error_string)
+    else:
+        return numer_rej
+
+
 
 #Przycisk zatwierdz
 zatwierdz_przycisk = Button(okno, height=3, width=40, bg='goldenrod', text='Zatwierdź', command=lambda: [zatwierdz(), otworz_nowe_okno()]).place(x=70, y=530)
@@ -137,9 +144,8 @@ liczba_monet_spinbox = Spinbox(okno, from_=1, to=200, width=20, bd=6, textvariab
 liczba_monet_spinbox.place(x=100, y=130)
 
 def liczba_monet(przycisk_monety):
+
    return liczba_monet_spinbox.get()
-
-
 
 
 # wypisywnie_dodanych_monet = Text(okno, height=1, width=25)

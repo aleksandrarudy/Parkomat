@@ -13,3 +13,7 @@ class BlednaRejestracja(Exception):
 class UjemnaLiczbaMonet(Exception):
     def __init__(self, name):
         super().__init__(name)
+
+class BlednaData(Exception):
+    def __init__(self, name):
+        super().__init__(name)

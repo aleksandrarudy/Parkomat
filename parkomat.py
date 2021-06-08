@@ -1,4 +1,4 @@
-from Interface import *
+# from Interface import *
 import datetime
 from Money import *
 from Money import Money
@@ -28,7 +28,10 @@ class Parkomat:
                         raise PrzepelnienieParkomatu('Ilość monet większa od 200')
 
     def dodajMonete(self, moneta, ilosc):
-        self.sprawdzIloscMonet(ilosc)
+        try:
+            self.sprawdzIloscMonet(ilosc)
+        except UjemnaLiczbaMonet:
+            raise UjemnaLiczbaMonet('Ilość monet nie może być ujemna')
         grosze = int(moneta * 100)
         ilosc=int(ilosc)
         M = Money(moneta)
@@ -44,13 +47,16 @@ class Parkomat:
         self.zliczanieMonet(moneta, ilosc)
 
     def pobierzRejestrecje(self, wartosc_wpisana):
+        wartosc_wpisana = wartosc_wpisana.rstrip('\n')
         format_rej = compile("^[\w\ ]*$")
-        if format_rej.match(wartosc_wpisana) is not None and len(wartosc_wpisana) <= 10 and len(wartosc_wpisana) > 3 and not wartosc_wpisana:
+        if format_rej.match(wartosc_wpisana) is not None and 3 < len(
+                wartosc_wpisana) <= 10 and wartosc_wpisana:
             wartosc_wpisana = wartosc_wpisana.replace(' ', '').upper()
             self._Rejestracja = wartosc_wpisana
         else:
             raise BlednaRejestracja('Błędna rejestracja\n Podaj jeszcze raz')
         return self._Rejestracja
+
 
     def czasZaJedenGrosz(self, sekundy):
         if self._CzasWyjazdu.hour >= 20:
@@ -98,6 +104,9 @@ class Parkomat:
         if int(ilosc) <= 0:
             raise UjemnaLiczbaMonet('Ilość monet nie może być ujemna')
 
+    def sprawdzDate(self):
+        pass
+
 
 
 P = Parkomat()
@@ -110,4 +119,4 @@ P = Parkomat()
 # print(P.pobierzAktualnyCzas())
 # print(P.pobierzCzasWyjazdu())
 
-# print(P.pobierzRejestrecje(''))
+# print(P.pobierzRejestrecje('aaa'))

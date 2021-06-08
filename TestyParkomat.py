@@ -1,8 +1,8 @@
 import unittest
-from parkomat import Parkomat
 from datetime import timedelta
 from Money import *
 from Exceptions import *
+from Parkomat import *
 
 
 class ParkomatTesty(unittest.TestCase):
@@ -80,20 +80,18 @@ class ParkomatTesty(unittest.TestCase):
 
 
 # # 8.	Wciśnięcie „Zatwierdź” bez wrzucania monet – oczekiwana informacja o błędzie.
-#     def test_zatwierdz_bez_pieniedzy(self):
-#         self.P.pobierzRejestrecje('')
-#
-#         with self.assertRaises(PrzepelnienieParkomatu) as exc:
-#             self.P.dodajMonete(0, 0)
-#             print(str(exc.value))
+    def test_zatwierdz_bez_pieniedzy(self):
+        with self.assertRaises(NieWrzuconoPieniedzy) as exc:
+            self.P.zatwierdz('aaaaa')
+            print(str(exc.value))
 #
 # # 9.	Wciśnięcie „Zatwierdź” bez wpisania numeru rejestracyjnego – oczekiwana informacja o błędzie. Wciśniecie „Zatwierdź”
 # #     po wpisaniu niepoprawnego numeru rejestracyjnego – oczekiwana informacja o błędzie
-#     def test_zatwierdz_bez_rejestracji_lub_zlej(self):
-#         with self.assertRaises(BlednaRejestracja) as exc:
-#
-#             self.P.pobierzRejestrecje('')
-#             print(str(exc.value))
+    def test_zatwierdz_bez_rejestracji_lub_zlej(self):
+        self.P.dodajMonete(2, 1)
+        with self.assertRaises(BlednaRejestracja) as exc:
+            self.P.pobierzRejestrecje('aas..s')
+            print(str(exc.value))
 
 
 

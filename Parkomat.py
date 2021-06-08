@@ -1,11 +1,8 @@
-# from Interface import *
-import datetime
-from Money import *
-from Money import Money
 from datetime import datetime, timedelta
 from re import compile
-from decimal import *
 from Exceptions import *
+from decimal import *
+from Money import Money
 
 getcontext().prec = 3
 
@@ -105,22 +102,13 @@ class Parkomat:
         if int(ilosc) <= 0:
             raise UjemnaLiczbaMonet('Ilość monet nie może być ujemna')
 
-    def sprawdzDate(self):
-        pass
+    def zatwierdz(self, rejestracja):
+        self.pobierzRejestrecje(rejestracja)
+        if self._Suma == 0:
+            raise NieWrzuconoPieniedzy('Nie wrzucono żadnych pieniędzy')
+        temp = 'Rejestracja: ' + self.pobierzRejestrecje(rejestracja) + '\nData zakupu: ' + str(self.pobierzAktualnyCzas()) \
+               + '\nData wyjazdu: ' + str(self.pobierzCzasWyjazdu())
 
-
-
-P = Parkomat()
-# print(P.zmianaAktualnegoCzasu('2021', '6', '14', 17, 00, 00))
-# P.dodajMonete(5,2)
-# P.dodajMonete(1,1)
-# P.dodajMonete(0.01,200)
-# #
-
-
-# P.dodajMonete(1)
-# print(P.pobierzAktualnyCzas())
-
-# print(P.pobierzCzasWyjazdu())
-
-# print(P.pobierzRejestrecje('aaa'))
+        self._Suma = 0
+        self._CzasWyjazdu = self._AktualnyCzas
+        return temp

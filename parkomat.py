@@ -89,6 +89,7 @@ class Parkomat:
         self._AktualnyCzas = a
         self._CzasWyjazdu = self._AktualnyCzas
         self._Suma = 0
+        return self._CzasWyjazdu
 
     def pobierzCzasWyjazdu(self):
         return self._CzasWyjazdu
@@ -110,13 +111,16 @@ class Parkomat:
 
 
 P = Parkomat()
-# P.dodajMonete(2)
-# P.dodajMonete(2)
-# P.dodajMonete(0.01)
-#
-# P.zmianaAktualnegoCzasu('2021', '6', '4', 19, 30, 33)
+# print(P.zmianaAktualnegoCzasu('2021', '6', '14', 17, 00, 00))
+# P.dodajMonete(5,2)
+# P.dodajMonete(1,1)
+# P.dodajMonete(0.01,200)
+# #
+
+
 # P.dodajMonete(1)
 # print(P.pobierzAktualnyCzas())
+
 # print(P.pobierzCzasWyjazdu())
 
 # print(P.pobierzRejestrecje('aaa'))

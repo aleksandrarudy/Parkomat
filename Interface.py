@@ -103,7 +103,7 @@ def zatwierdz_rejestracje():
     okno.rejestracja = ''
     setattr(okno, 'rejestracja', wpisywanie_rejestracji.get(1.0, END))
     numer_rej = P.pobierzRejestrecje(okno.rejestracja)
-    Label(okno, text=P.pobierzRejestrecje(okno.rejestracja)).place(x=300, y=205)
+
     return numer_rej
 
 

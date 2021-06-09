@@ -116,7 +116,7 @@ class ParkomatTesty(unittest.TestCase):
         P = Parkomat()
         P.dodajMonete(2, 1)
         with self.assertRaises(BlednaRejestracja) as exc:
-            P.pobierzRejestrecje('aas..s')
+            P.pobierzRejestrecje('')
             print(str(exc.value))
 
     def test_zatwierdz_bez_pieniedzy(self):

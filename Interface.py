@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import Label, Button, Spinbox, messagebox
 import traceback
 
+
 def GUI():
     """
     Metoda do obsługi interfejsu

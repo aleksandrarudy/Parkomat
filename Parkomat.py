@@ -6,6 +6,7 @@ from Money import Money
 
 getcontext().prec = 3
 
+
 class Parkomat:
     """
     Klasa Parkomat przechowująca liste monet, aktualny czas, czas wyjazdu, rejestracje, sume wrzucaonych monet, wartosci monet i ich ilosc

@@ -5,12 +5,14 @@ class NiecalkowitaLiczbaMonet(Exception):
     def __init__(self, name):
         super().__init__(name)
 
+
 class PrzepelnienieParkomatu(Exception):
     """
     Rzuca wyjątek gdy parkomat jest przepełniony
     """
     def __init__(self, name):
         super().__init__(name)
+
 
 class BlednaRejestracja(Exception):
     """
@@ -19,12 +21,14 @@ class BlednaRejestracja(Exception):
     def __init__(self, name):
         super().__init__(name)
 
+
 class UjemnaLiczbaMonet(Exception):
     """
     Rzuca wyjątek gdy liczba monet jest liczbą ujemną
     """
     def __init__(self, name):
         super().__init__(name)
+
 
 class NieWrzuconoPieniedzy(Exception):
     """

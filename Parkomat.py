@@ -7,6 +7,9 @@ from Money import Money
 getcontext().prec = 3
 
 class Parkomat:
+    """
+    Klasa Parkomat przechowująca liste monet, aktualny czas, czas wyjazdu, rejestracje, sume wrzucaonych monet, wartosci monet i ich ilosc
+    """
     def __init__(self):
         self._ListaMonet = []
         self._AktualnyCzas = datetime.now()
@@ -16,6 +19,12 @@ class Parkomat:
         self._wartosc_ilosc = {0.01:0, 0.02:0, 0.05:0, 0.1:0, 0.2:0, 0.5:0, 1:0, 2:0, 5:0}
 
     def zliczanieMonet(self, wartosc, ilosc):
+        """
+        metoda zliczająca liczbe monet oraz sprawdzająca czy iloś danego nominału nie jest za duża
+        :param wartosc:
+        :param ilosc:
+        :return:
+        """
         wartosc = Decimal(str(wartosc))
         for x in range(len(self._ListaMonet)):
             if wartosc == self._ListaMonet[x].pobierzWartosc():
@@ -25,6 +34,12 @@ class Parkomat:
                         raise PrzepelnienieParkomatu('Ilość monet większa od 200')
 
     def dodajMonete(self, moneta, ilosc):
+        """
+        metoda pozwalająca na dodanie monety o podanym nominale
+        :param moneta:
+        :param ilosc:
+        :return:
+        """
         try:
             self.sprawdzIloscMonet(ilosc)
         except UjemnaLiczbaMonet:
@@ -44,6 +59,11 @@ class Parkomat:
         self.zliczanieMonet(moneta, ilosc)
 
     def pobierzRejestrecje(self, wartosc_wpisana):
+        """
+        metoda pozwalająca na wpisanie rejestracji i sprawdzająca jej poprawność
+        :param wartosc_wpisana:
+        :return:
+        """
         wartosc_wpisana = wartosc_wpisana.rstrip('\n')
         format_rej = compile("^[\w\ ]*$")
         if format_rej.match(wartosc_wpisana) is not None and 3 < len(
@@ -56,6 +76,11 @@ class Parkomat:
 
 
     def czasZaJedenGrosz(self, sekundy):
+        """
+        metoda aktualizująca date wyjazdu o czas odpowidni wrzuconym pieniądzom
+        :param sekundy:
+        :return:
+        """
         if self._CzasWyjazdu.hour >= 20:
             sek = self._CzasWyjazdu.second
             self._CzasWyjazdu += timedelta(days=1)
@@ -81,6 +106,16 @@ class Parkomat:
         self._CzasWyjazdu += timedelta(seconds=sekundy)
 
     def zmianaAktualnegoCzasu(self, rok, miesiac, dzien, godziny, minuty, sekundy):
+        """
+        metoda pozwalając ana zmiane aktualnej daty
+        :param rok:
+        :param miesiac:
+        :param dzien:
+        :param godziny:
+        :param minuty:
+        :param sekundy:
+        :return:
+        """
         d = datetime.strptime(str(rok + ' ' + miesiac + ' ' + dzien), '%Y %m %d')
         a = d.replace(hour=godziny, minute=minuty, second=sekundy)
         self._AktualnyCzas = a
@@ -89,12 +124,25 @@ class Parkomat:
         return self._CzasWyjazdu
 
     def pobierzCzasWyjazdu(self):
+        """
+        metoda zwracająca czas wyjazdu
+        :return:
+        """
         return self._CzasWyjazdu
 
     def pobierzAktualnyCzas(self):
+        """
+        metoda zwracająca aktualny czas
+        :return:
+        """
         return self._AktualnyCzas
 
     def sprawdzIloscMonet(self, ilosc):
+        """
+        metoda sprawdzająca czy podana ilość monet jest poprawna (całkowita, nieujemna)
+        :param ilosc:
+        :return:
+        """
         try:
             int(ilosc)
         except ValueError:
@@ -103,6 +151,11 @@ class Parkomat:
             raise UjemnaLiczbaMonet('Ilość monet nie może być ujemna')
 
     def zatwierdz(self, rejestracja):
+        """
+        metoda służaca do wydania potwierdzenia opłacanie parkingu
+        :param rejestracja:
+        :return:
+        """
         self.pobierzRejestrecje(rejestracja)
         if self._Suma == 0:
             raise NieWrzuconoPieniedzy('Nie wrzucono żadnych pieniędzy')

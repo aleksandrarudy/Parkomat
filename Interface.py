@@ -5,24 +5,35 @@ from tkinter import Label, Button, Spinbox, messagebox
 import traceback
 
 def GUI():
-    global P, okno, otworz_nowe_okno, zatwierdz_rejestracje, wpisywanie_rejestracji, wpisywanie_nowej_daty, aktdata, zapis_Zmiany_daty_przycisk, data_aktualna, datawyjazdu, liczba_monet_spinbox, liczba_monet
+    """
+    Metoda do obsługi interfejsu
+    :return:
+    """
+    global P, okno, otworz_nowe_okno, zatwierdz_rejestracje, wpisywanie_rejestracji, wpisywanie_nowej_daty, aktdata,\
+        zapis_Zmiany_daty_przycisk, data_aktualna, datawyjazdu, liczba_monet_spinbox, liczba_monet
 
     def callback_error(self, *args):
+        """
+        metoda do wyświetlania komunikatów o błędach
+        :param self:
+        :param args:
+        :return:
+        """
         error_string = '{}'.format(args[1])
         messagebox.showwarning("showworning", error_string)
 
     Tk.report_callback_exception = callback_error
-    # tworzenia okna głównego
+
+    """ Tworzenie okna głównego """
     P = Parkomat()
     okno = Tk()
     okno.geometry('450x600')
     okno.resizable(width=False, height=False)
-    # tytul okna
     tytul = Label(okno, text='PARKOMAT')
     tytul.config(font=('Calibri', 20, 'bold',))
     tytul.pack()
-    C = Coin()
-    # przyciski dodawania monet
+
+    """ tworzenie przycisków do wrzucania monet"""
     button001 = Button(okno, height=2, width=15, bg='light grey', text='1gr',
                        command=lambda: [P.dodajMonete(0.01, liczba_monet(liczba_monet_spinbox)),
                                         datawyjazdu.configure(text=str(P.pobierzCzasWyjazdu()))])
@@ -72,8 +83,12 @@ def GUI():
                                        datawyjazdu.configure(text=str(P.pobierzCzasWyjazdu()))])
     button50.place(x=300, y=450)
 
-    # funkjca tworząca nowe okno i wyświetlająća rejestrcję, date zakupu, date wyjazdu
     def otworz_nowe_okno(bilet):
+        """
+        funkjca tworząca okno z wydrukiem biletu wyświetlając rejestrcję, date zakupu, date wyjazdu
+        :param bilet:
+        :return:
+        """
         nowe_okno = Toplevel(okno)
         nowe_okno.geometry('300x300')
         nowe_okno.resizable(width=False, height=False)
@@ -85,26 +100,35 @@ def GUI():
         data_aktualna.configure(text=str(P.pobierzAktualnyCzas()))
         datawyjazdu.configure(text=str(P.pobierzAktualnyCzas()))
 
-    # oprogramowanie przycisku zatwierdz
+
     def zatwierdz_rejestracje():
+        """
+        Metoda pobierająca wpisana z odpoweidniego pola na rejestrację
+        :return:
+        """
         okno.rejestracja = ''
         setattr(okno, 'rejestracja', wpisywanie_rejestracji.get(1.0, END))
         return P.zatwierdz(okno.rejestracja)
 
-    # Przycisk zatwierdz
+    """ Przycisk zatwierdz"""
     zatwierdz_przycisk = Button(okno, height=3, width=40, bg='goldenrod', text='Zatwierdź',
                                 command=lambda: [otworz_nowe_okno(zatwierdz_rejestracje())]).place(x=70, y=530)
-    # miejsce na wpisanie rejestracji
+    """tworzenie pola w interfejsie na wpisanie rejestracji"""
     Label(okno, text="Rejestracja: (min 4 znaki, max 10)").place(x=80, y=185)
     wpisywanie_rejestracji = Text(okno, height=1, width=25)
     wpisywanie_rejestracji.place(x=100, y=205)
-    # miejsce na wpisanie nowej daty
+
+    """tworzenie pola w interfejsie na wpisanie nowej daty"""
     Label(okno, text="Zmiana czasu (należy wpisać date w formacie YYYY MM DD HH MM SS:)").place(x=30, y=130)
     wpisywanie_nowej_daty = Text(okno, height=1, width=25)
     wpisywanie_nowej_daty.place(x=100, y=155)
 
-    # funkcja zmieniająca datę
+
     def aktdata():
+        """
+        Metoda pobierająca wpisana w odpoweidnim polu nową datę
+        :return:
+        """
         okno.date = ''
         setattr(okno, 'date', wpisywanie_nowej_daty.get(1.0, END))
         okno.date = okno.date.split(" ", 5)
@@ -113,27 +137,40 @@ def GUI():
 
     # funkcja wypisująca zmienioną datę
     def zapis_Zmiany_daty_przycisk(data):
+        """
+        Metoda służąca do aktualizowania w interfejsie aktualnej daty na datę którą zmieniliśmy,
+        oraz aktualizowania daty wyjazdu po wrzucenieu monet
+        :param data:
+        :return:
+        """
         data.configure(text=str(P.pobierzAktualnyCzas()))
         datawyjazdu.configure(text=str(P.pobierzCzasWyjazdu()))
 
-    # przycisk do zmiany daty
+    """ Przycisk do zmiany daty """
     zmiana_daty_przycisk = Button(okno, text="Zmień date", width=10,
                                   command=lambda: [aktdata(), zapis_Zmiany_daty_przycisk(data_aktualna)]).place(x=320,
                                                                                                                 y=150)
-    # wypisywanie aktualnej daty w oknie
+    """wypisywanie aktualnej daty w oknie"""
     Label(okno, text='Aktualna data: ').place(x=80, y=40)
     data_aktualna = Label(okno, width=30, text=P.pobierzAktualnyCzas())
     data_aktualna.place(x=100, y=60)
-    # wypisywanie daty wyjazdu w oknie
+
+    """wypisywanie daty wyjazdu w oknie"""
     Label(okno, text='Data wyjazdu: ').place(x=80, y=80)
     datawyjazdu = Label(okno, width=30, text=P.pobierzCzasWyjazdu())
     datawyjazdu.place(x=100, y=100)
-    # spinbox na liczbe monet
+
+    """spinbox na liczbe monet"""
     Label(okno, text='Wpisz ilość monet: ').place(x=80, y=235)
     liczba_monet_spinbox = Spinbox(okno, from_=1, to=200, width=30, bd=6, textvariable=IntVar())
     liczba_monet_spinbox.place(x=100, y=260)
 
     def liczba_monet(przycisk_monety):
+        """
+        metoda przyjmująca jako wartość liczbe wpisną w spinboxie
+        :param przycisk_monety:
+        :return:
+        """
         return liczba_monet_spinbox.get()
 
     okno.mainloop()
